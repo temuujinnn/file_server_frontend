@@ -219,46 +219,46 @@ export const downloadProduct = (productId: string): void => {
   const baseUrl =
     import.meta.env.VITE_API_BASE_URL || "http://202.180.218.186:9000";
   const token = getAccessToken();
-
+  
   if (!token) {
     console.error("No access token found for download");
     return;
   }
-
+  
   const downloadUrl = `${baseUrl}/user/game/download?id=${productId}`;
-
+  
   // Create a temporary link element with authorization header
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = downloadUrl;
-  link.download = "";
-
+  link.download = '';
+  
   // Add authorization header by creating a fetch request first
   fetch(downloadUrl, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
   })
-    .then((response) => {
-      if (response.ok) {
-        return response.blob();
-      }
-      throw new Error("Download failed");
-    })
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      link.href = url;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    })
-    .catch((error) => {
-      console.error("Error downloading product:", error);
-      // Fallback to opening URL in new tab
-      window.open(downloadUrl, "_blank");
-    });
+  .then(response => {
+    if (response.ok) {
+      return response.blob();
+    }
+    throw new Error('Download failed');
+  })
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  })
+  .catch(error => {
+    console.error('Error downloading product:', error);
+    // Fallback to opening URL in new tab
+    window.open(downloadUrl, "_blank");
+  });
 };
 
 export default api;
