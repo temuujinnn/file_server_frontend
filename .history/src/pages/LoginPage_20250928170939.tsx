@@ -93,13 +93,11 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-md w-full space-y-6 sm:space-y-8">
         <div>
-          <div
-            className="mx-auto h-10 w-10 sm:h-12 sm:w-12 bg-electric-blue-500 flex items-center justify-center rounded-lg"
-          >
+          <div className="mx-auto h-10 w-10 sm:h-12 sm:w-12 bg-electric-blue-500 flex items-center justify-center rounded-lg">
             <span className="text-white font-bold text-lg sm:text-xl">G</span>
           </div>
           <h2 className="mt-4 sm:mt-6 text-center text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-            Natsag.mnд нэвтрэх
+            Filebox.mnд нэвтрэх
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Эсвэл{" "}
@@ -112,7 +110,10 @@ const LoginPage: React.FC = () => {
           </p>
         </div>
 
-        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="mt-6 sm:mt-8 space-y-4 sm:space-y-6"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-4">
             <div>
               <label

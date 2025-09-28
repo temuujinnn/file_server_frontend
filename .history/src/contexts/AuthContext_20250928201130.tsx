@@ -35,29 +35,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const refreshAuth = async () => {
+  const refreshAuth = () => {
     console.log("Refreshing authentication state...");
     setIsLoading(true);
 
     try {
+      const currentUser = getUser();
       const authStatus = checkAuth();
+
+      console.log("Auth refresh - User:", currentUser);
       console.log("Auth refresh - Is authenticated:", authStatus);
 
-      if (authStatus) {
-        // If authenticated, fetch fresh user data from API
-        console.log("Fetching fresh user profile from API...");
-        const freshUser = await fetchUserProfile();
-        console.log("Fresh user data from API:", freshUser);
-
-        // Update localStorage with fresh data
-        setUser(freshUser);
-        setIsAuthenticated(true);
-      } else {
-        // If not authenticated, clear user data
-        console.log("Not authenticated - clearing user data");
-        setUser(null);
-        setIsAuthenticated(false);
-      }
+      setUser(currentUser);
+      setIsAuthenticated(authStatus);
     } catch (error) {
       console.error("Error refreshing auth:", error);
       setUser(null);

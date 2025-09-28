@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
                 <span className="text-white font-bold text-lg">G</span>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Natsag.mn
+                Filebox.mn
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">

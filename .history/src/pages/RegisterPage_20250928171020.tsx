@@ -91,7 +91,7 @@ const RegisterPage: React.FC = () => {
             <span className="text-white font-bold text-lg sm:text-xl">G</span>
           </div>
           <h2 className="mt-4 sm:mt-6 text-center text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
-            Natsag.mnд бүртгэл үүсгэх
+            Filebox.mnд бүртгэл үүсгэх
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Эсвэл{" "}
@@ -104,7 +104,10 @@ const RegisterPage: React.FC = () => {
           </p>
         </div>
 
-        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+        <form
+          className="mt-6 sm:mt-8 space-y-4 sm:space-y-6"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-4">
             <div>
               <label

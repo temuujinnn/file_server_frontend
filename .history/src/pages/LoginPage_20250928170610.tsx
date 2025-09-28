@@ -100,7 +100,7 @@ const LoginPage: React.FC = () => {
             <span className="text-white font-bold text-xl">G</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
-            Natsag.mnд нэвтрэх
+            Filebox.mnд нэвтрэх
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
             Эсвэл{" "}

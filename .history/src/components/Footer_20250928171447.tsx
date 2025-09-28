@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
                 <span className="text-white font-bold text-lg">G</span>
               </div>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Natsag.mn
+                Filebox.mn
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 leading-relaxed">
@@ -124,7 +124,7 @@ const Footer: React.FC = () => {
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div className="text-sm text-gray-600 dark:text-gray-300 text-center sm:text-left">
-              © {currentYear} Natsag.mn. Бүх эрх хуулиар хамгаалагдсан.
+              © {currentYear} Filebox.mn. Бүх эрх хуулиар хамгаалагдсан.
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-sm text-gray-600 dark:text-gray-300">
               <span>Тоглогчдод зориулсан ❤️</span>

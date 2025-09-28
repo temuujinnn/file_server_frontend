@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
         console.log("Fetching fresh user profile from API...");
         const freshUser = await fetchUserProfile();
         console.log("Fresh user data from API:", freshUser);
-
+        
         // Update localStorage with fresh data
         setUser(freshUser);
         setIsAuthenticated(true);

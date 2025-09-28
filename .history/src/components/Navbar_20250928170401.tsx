@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
               <span className="text-white font-bold text-lg">G</span>
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Natsag.mn
+              Filebox.mn
             </span>
           </Link>
 
