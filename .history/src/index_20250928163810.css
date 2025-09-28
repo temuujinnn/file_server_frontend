@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: "Inter", sans-serif;
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-electric-blue-500 hover:bg-electric-blue-600 text-white font-medium py-2 px-4 transition-colors duration-200;
+    border-radius: 8px;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-medium py-2 px-4 transition-colors duration-200;
+    border-radius: 8px;
+  }
+
+  .card {
+    @apply bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow duration-200 border border-gray-200 dark:border-gray-700;
+    border-radius: 8px;
+  }
+
+  .tag-button {
+    @apply bg-gray-200 hover:bg-electric-blue dark:bg-gray-700 dark:hover:bg-electric-blue text-gray-700 hover:text-white dark:text-gray-300 dark:hover:text-white px-3 py-2 text-sm font-medium transition-colors duration-200;
+    border-radius: 8px;
+  }
+
+  .tag-button.active {
+    @apply bg-electric-blue text-white;
+  }
+}

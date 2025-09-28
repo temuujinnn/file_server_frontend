@@ -1,0 +1,89 @@
+import type {AuthTokens, User} from "../types/index";
+
+const ACCESS_TOKEN_KEY = "gamehub_access_token";
+const REFRESH_TOKEN_KEY = "gamehub_refresh_token";
+const USER_KEY = "gamehub_user";
+
+// Token management functions
+export const setTokens = (tokens: AuthTokens): void => {
+  localStorage.setItem(ACCESS_TOKEN_KEY, tokens.accessToken);
+  localStorage.setItem(REFRESH_TOKEN_KEY, tokens.refreshToken);
+};
+
+export const getAccessToken = (): string | null => {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+};
+
+export const getRefreshToken = (): string | null => {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+};
+
+export const clearTokens = (): void => {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
+};
+
+export const isAuthenticated = (): boolean => {
+  const token = getAccessToken();
+  console.log("Checking authentication - token exists:", !!token);
+  
+  if (!token) {
+    console.log("No access token found");
+    return false;
+  }
+
+  try {
+    // Check if token is expired
+    const parts = token.split(".");
+    if (parts.length !== 3) {
+      console.log("Invalid token format - not a valid JWT");
+      return false;
+    }
+    
+    const payload = JSON.parse(atob(parts[1]));
+    console.log("Token payload:", payload);
+    
+    const currentTime = Date.now() / 1000;
+    const isExpired = payload.exp <= currentTime;
+    
+    console.log("Token expiration check:", {
+      exp: payload.exp,
+      currentTime,
+      isExpired,
+      isValid: !isExpired
+    });
+    
+    return !isExpired;
+  } catch (error) {
+    console.error("Error parsing token:", error);
+    return false;
+  }
+};
+
+// User management functions
+export const setUser = (user: User): void => {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+};
+
+export const getUser = (): User | null => {
+  const userStr = localStorage.getItem(USER_KEY);
+  if (!userStr) return null;
+
+  try {
+    return JSON.parse(userStr);
+  } catch {
+    return null;
+  }
+};
+
+export const clearUser = (): void => {
+  localStorage.removeItem(USER_KEY);
+};
+
+// Logout function
+export const logout = (): void => {
+  clearTokens();
+  clearUser();
+  window.location.href = "/";
+};
