@@ -38,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
 
     // Check subscription status
-    if (!user?.isSubscribed == false) {
+    if (!user?.isSubscribed) {
       console.log(
         "User not premium - showing subscription modal ",
         user?.isSubscribed

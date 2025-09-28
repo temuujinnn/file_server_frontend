@@ -5,12 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import {
-  getUser,
-  clearTokens,
-  clearUser,
-  isAuthenticated as checkAuth,
-} from "../services/auth";
+import {getUser, clearTokens, clearUser, isAuthenticated as checkAuth} from "../services/auth";
 import type {User} from "../types/index";
 
 interface AuthContextType {
@@ -39,7 +34,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({children}) => {
 
     try {
       const currentUser = getUser();
-      const authStatus = checkAuth();
+      const authStatus = isAuthenticated;
 
       console.log("Auth refresh - User:", currentUser);
       console.log("Auth refresh - Is authenticated:", authStatus);

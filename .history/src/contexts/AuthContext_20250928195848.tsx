@@ -5,12 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import {
-  getUser,
-  clearTokens,
-  clearUser,
-  isAuthenticated as checkAuth,
-} from "../services/auth";
+import {getUser, clearTokens, clearUser, isAuthenticated as checkAuth} from "../services/auth";
 import type {User} from "../types/index";
 
 interface AuthContextType {

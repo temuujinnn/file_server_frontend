@@ -38,7 +38,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
 
     // Check subscription status
-    if (!user?.isSubscribed == false) {
+    if (!user?.isSubscribed) {
       console.log(
         "User not premium - showing subscription modal ",
         user?.isSubscribed
@@ -325,7 +325,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       )}
 
       {/* Download Modal */}
-      {showDownloadModal && (
+      {showDownloadModal == false && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">

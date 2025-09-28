@@ -38,18 +38,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
     }
 
     // Check subscription status
-    if (!user?.isSubscribed == false) {
-      console.log(
-        "User not premium - showing subscription modal ",
-        user?.isSubscribed
-      );
+    if (!user?.isSubscribed) {
+      console.log("User not premium - showing subscription modal");
       setShowSubscriptionModal(true);
       return;
     }
 
     // User is authenticated and has premium subscription
-    console.log("User has premium subscription - showing download modal");
-    setShowDownloadModal(true);
+    const productId = product.id || product._id;
+    console.log("Product ID for download:", productId);
+
+    if (productId) {
+      console.log("Starting download for product:", productId);
+      downloadProduct(productId);
+    } else {
+      console.error("No product ID found for download");
+    }
   };
 
   return (
@@ -315,41 +319,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
               </Link>
               <button
                 onClick={() => setShowSubscriptionModal(false)}
-                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"
-              >
-                Цуцлах
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Download Modal */}
-      {showDownloadModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Татаж авах
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              "{product.title}" бүтээгдэхүүнийг татаж авах уу?
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <button
-                onClick={() => {
-                  const productId = product.id || product._id;
-                  if (productId) {
-                    console.log("Starting download for product:", productId);
-                    downloadProduct(productId);
-                  }
-                  setShowDownloadModal(false);
-                }}
-                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 text-center"
-              >
-                Татаж авах
-              </button>
-              <button
-                onClick={() => setShowDownloadModal(false)}
                 className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"
               >
                 Цуцлах
