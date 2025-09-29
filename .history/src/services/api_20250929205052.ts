@@ -268,14 +268,14 @@ export const downloadProduct = async (productId: string): Promise<void> => {
 
     // const blob = await fileResponse.blob();
 
-    // const blobUrl = window.URL.createObjectURL(blob);
-    // console.log("blobUrl", blobUrl);
-    // const link = document.createElement("a");
-    // link.href = blobUrl;
-    // link.target = "_blank"; // open like <a href="..." target="_blank">
-    // link.rel = "noopener noreferrer";
-    // link.download = "";
-    // window.open(blobUrl, "_blank");
+    const blobUrl = window.URL.createObjectURL(blob);
+    console.log("blobUrl", blobUrl);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.target = "_blank"; // open like <a href="..." target="_blank">
+    link.rel = "noopener noreferrer";
+    link.download = "";
+    window.open(blobUrl, "_blank");
     // document.body.appendChild(link);
     // link.click();
     // document.body.removeChild(link);

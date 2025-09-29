@@ -335,20 +335,25 @@ const ProductCard: React.FC<ProductCardProps> = ({
               "{product.title}" бүтээгдэхүүнийг татаж авах уу?
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
-              {" "}
-              <button
-                onClick={() => {
-                  const productId = product.id || product._id;
-                  if (productId) {
-                    console.log("Starting download for product:", productId);
-                    downloadProduct(productId);
-                  }
-                  setShowDownloadModal(false);
-                }}
-                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 text-center"
+              <a
+                href={`http://202.180.218.186:9000/user/game/download?id=${product._id}`}
+                target="_blank"
               >
-                Татаж авах
-              </button>
+                {" "}
+                <button
+                  onClick={() => {
+                    const productId = product.id || product._id;
+                    if (productId) {
+                      console.log("Starting download for product:", productId);
+                      downloadProduct(productId);
+                    }
+                    setShowDownloadModal(false);
+                  }}
+                  className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 text-center"
+                >
+                  Татаж авах
+                </button>
+              </a>
               <button
                 onClick={() => setShowDownloadModal(false)}
                 className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"

@@ -253,29 +253,29 @@ export const downloadProduct = async (productId: string): Promise<void> => {
 
     // Step 2: call the download_link endpoint with returned ticket id
     const downloadUrl = `${baseUrl}/user/game/download?id=${ticketId}`;
-    window.open(downloadUrl, "_blank");
-    // const fileResponse = await fetch(downloadUrl, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    // });
 
-    // if (!fileResponse.ok) {
-    //   throw new Error(`Download failed (${fileResponse.status})`);
-    // }
+    const fileResponse = await fetch(downloadUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
-    // const blob = await fileResponse.blob();
+    if (!fileResponse.ok) {
+      throw new Error(`Download failed (${fileResponse.status})`);
+    }
 
-    // const blobUrl = window.URL.createObjectURL(blob);
-    // console.log("blobUrl", blobUrl);
-    // const link = document.createElement("a");
-    // link.href = blobUrl;
-    // link.target = "_blank"; // open like <a href="..." target="_blank">
-    // link.rel = "noopener noreferrer";
-    // link.download = "";
-    // window.open(blobUrl, "_blank");
+    const blob = await fileResponse.blob();
+
+    const blobUrl = window.URL.createObjectURL(blob);
+    console.log("blobUrl", blobUrl);
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.target = "_blank"; // open like <a href="..." target="_blank">
+    link.rel = "noopener noreferrer";
+    link.download = "";
+    window.open(blobUrl, "_blank");
     // document.body.appendChild(link);
     // link.click();
     // document.body.removeChild(link);

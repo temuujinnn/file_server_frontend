@@ -215,7 +215,7 @@ export const upgradeToPremium = async (): Promise<{
 };
 
 // Download function
-export const downloadProduct = async (productId: string): Promise<void> => {
+export const downloadProduct = (productId: string): void => {
   const baseUrl =
     import.meta.env.VITE_API_BASE_URL || "http://202.180.218.186:9000";
   const token = getAccessToken();
@@ -225,64 +225,43 @@ export const downloadProduct = async (productId: string): Promise<void> => {
     return;
   }
 
-  try {
-    // Step 1: request a download ticket/id
-    const ticketResponse = await fetch(
-      `${baseUrl}/user/game/download_link?id=${productId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
+  const downloadUrl = `${baseUrl}/user/game/download_link?id=${productId}`;
+
+  // Create a temporary link element with authorization header
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = "";
+
+  // Add authorization header by creating a fetch request first
+  fetch(downloadUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      {"success":true,"data":"68da7de37e892a851d3cebdf"}
+
+      if (response.ok) {
+        
+        return response.blob();
       }
-    );
-
-    if (!ticketResponse.ok) {
-      throw new Error(
-        `Failed to get download ticket (${ticketResponse.status})`
-      );
-    }
-
-    const ticketJson = await ticketResponse.json();
-    // Expected format: { success: true, data: "<ticketId>" }
-    const ticketId: string | undefined = ticketJson?.data;
-    if (!ticketJson?.success || !ticketId) {
-      throw new Error("Invalid ticket response");
-    }
-
-    // Step 2: call the download_link endpoint with returned ticket id
-    const downloadUrl = `${baseUrl}/user/game/download?id=${ticketId}`;
-    window.open(downloadUrl, "_blank");
-    // const fileResponse = await fetch(downloadUrl, {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    // if (!fileResponse.ok) {
-    //   throw new Error(`Download failed (${fileResponse.status})`);
-    // }
-
-    // const blob = await fileResponse.blob();
-
-    // const blobUrl = window.URL.createObjectURL(blob);
-    // console.log("blobUrl", blobUrl);
-    // const link = document.createElement("a");
-    // link.href = blobUrl;
-    // link.target = "_blank"; // open like <a href="..." target="_blank">
-    // link.rel = "noopener noreferrer";
-    // link.download = "";
-    // window.open(blobUrl, "_blank");
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-    // window.URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    console.error("Error downloading product:", error);
-  }
+      throw new Error("Download failed");
+    })
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error("Error downloading product:", error);
+      // Fallback to opening URL in new tab
+      window.open(downloadUrl, "_blank");
+    });
 };
 
 export default api;
