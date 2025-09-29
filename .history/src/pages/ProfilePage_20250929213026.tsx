@@ -82,12 +82,7 @@ const ProfilePage: React.FC = () => {
       // Remove any whitespace characters immediately
       value = value.replace(/\s+/g, "");
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailError =
-        value.length === 0
-          ? undefined
-          : emailPattern.test(value)
-          ? undefined
-          : "И-мэйлийн формат буруу";
+      const emailError = value.length === 0 ? undefined : emailPattern.test(value) ? undefined : "И-мэйлийн формат буруу";
       setFormErrors((prev) => ({...prev, email: emailError}));
     }
 

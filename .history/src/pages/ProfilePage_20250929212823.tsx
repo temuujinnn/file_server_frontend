@@ -81,14 +81,7 @@ const ProfilePage: React.FC = () => {
     if (name === "email") {
       // Remove any whitespace characters immediately
       value = value.replace(/\s+/g, "");
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailError =
-        value.length === 0
-          ? undefined
-          : emailPattern.test(value)
-          ? undefined
-          : "И-мэйлийн формат буруу";
-      setFormErrors((prev) => ({...prev, email: emailError}));
+      setFormErrors((prev) => ({...prev, email: undefined}));
     }
 
     if (name === "phone") {
@@ -112,12 +105,8 @@ const ProfilePage: React.FC = () => {
     const email = (editForm.email ?? "").toString();
     const phone = (editForm.phone ?? "").toString();
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (/\s/.test(email)) {
       nextErrors.email = "И-мэйл завсаргүй бичнэ үү";
-    }
-    if (!nextErrors.email && email && !emailPattern.test(email)) {
-      nextErrors.email = "И-мэйлийн формат буруу";
     }
     if (phone.length !== 8 || /\D/.test(phone)) {
       nextErrors.phone = "Утасны дугаар зөвхөн 8 цифр байх ёстой";

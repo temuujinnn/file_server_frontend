@@ -12,10 +12,7 @@ const ProfilePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState<Partial<User>>({});
-  const [formErrors, setFormErrors] = useState<{
-    email?: string;
-    phone?: string;
-  }>({});
+  const [formErrors, setFormErrors] = useState<{email?: string; phone?: string}>({});
   const [showPremiumModal, setShowPremiumModal] = useState(false);
 
   useEffect(() => {
@@ -81,23 +78,13 @@ const ProfilePage: React.FC = () => {
     if (name === "email") {
       // Remove any whitespace characters immediately
       value = value.replace(/\s+/g, "");
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const emailError =
-        value.length === 0
-          ? undefined
-          : emailPattern.test(value)
-          ? undefined
-          : "И-мэйлийн формат буруу";
-      setFormErrors((prev) => ({...prev, email: emailError}));
+      setFormErrors((prev) => ({...prev, email: undefined}));
     }
 
     if (name === "phone") {
       // Keep digits only and limit to 8
       value = value.replace(/\D+/g, "").slice(0, 8);
-      const phoneError =
-        value.length === 0 || value.length === 8
-          ? undefined
-          : "Утасны дугаар 8 оронтой байх ёстой";
+      const phoneError = value.length === 0 || value.length === 8 ? undefined : "Утасны дугаар 8 оронтой байх ёстой";
       setFormErrors((prev) => ({...prev, phone: phoneError}));
     }
 
@@ -112,12 +99,8 @@ const ProfilePage: React.FC = () => {
     const email = (editForm.email ?? "").toString();
     const phone = (editForm.phone ?? "").toString();
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (/\s/.test(email)) {
       nextErrors.email = "И-мэйл завсаргүй бичнэ үү";
-    }
-    if (!nextErrors.email && email && !emailPattern.test(email)) {
-      nextErrors.email = "И-мэйлийн формат буруу";
     }
     if (phone.length !== 8 || /\D/.test(phone)) {
       nextErrors.phone = "Утасны дугаар зөвхөн 8 цифр байх ёстой";
@@ -220,9 +203,7 @@ const ProfilePage: React.FC = () => {
                   disabled={
                     !!formErrors.email ||
                     !!formErrors.phone ||
-                    (editForm.phone
-                      ? (editForm.phone as string).length !== 8
-                      : true)
+                    (editForm.phone ? (editForm.phone as string).length !== 8 : true)
                   }
                 >
                   Өөрчлөлт хадгалах
@@ -302,9 +283,7 @@ const ProfilePage: React.FC = () => {
                     </p>
                   )}
                   {isEditing && formErrors.email && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {formErrors.email}
-                    </p>
+                    <p className="mt-1 text-xs text-red-600">{formErrors.email}</p>
                   )}
                 </div>
 
@@ -327,9 +306,7 @@ const ProfilePage: React.FC = () => {
                     </p>
                   )}
                   {isEditing && formErrors.phone && (
-                    <p className="mt-1 text-xs text-red-600">
-                      {formErrors.phone}
-                    </p>
+                    <p className="mt-1 text-xs text-red-600">{formErrors.phone}</p>
                   )}
                 </div>
 
