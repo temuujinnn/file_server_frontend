@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import {
+  getUser,
   clearTokens,
   clearUser,
   isAuthenticated as checkAuth,
