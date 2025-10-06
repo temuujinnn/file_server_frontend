@@ -47,9 +47,7 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
     }
 
     // User is authenticated and has premium subscription
-    console.log(
-      "User has premium subscription - showing download confirmation"
-    );
+    console.log("User has premium subscription - showing download confirmation");
     setShowDownloadModal(true);
   };
 
@@ -254,6 +252,17 @@ const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               {/* Product Info */}
               <div className="space-y-3">
+                {product.path && (
+                  <div>
+                    <span className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+                      Зам:
+                    </span>
+                    <p className="text-gray-900 dark:text-white font-mono text-xs sm:text-sm bg-gray-100 dark:bg-gray-700 p-2 rounded break-all">
+                      {product.path}
+                    </p>
+                  </div>
+                )}
+
                 {product.youtubeLink && (
                   <div>
                     <span className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm block mb-2">

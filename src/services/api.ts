@@ -55,23 +55,35 @@ api.interceptors.response.use(
 );
 
 // API functions for products and tags
-export const fetchAllProducts = async (): Promise<Product[]> => {
+export const fetchAllProducts = async (
+  page: number = 1,
+  pageSize: number = 20
+): Promise<{products: Product[]; currentPage: number; pageSize: number}> => {
   try {
-    console.log("Fetching all products...");
-    const response = await api.get<{success: boolean; data: Product[]}>(
-      "/user/game/all"
-    );
+    console.log(`Fetching products page ${page}...`);
+    const response = await api.get<{
+      success: boolean;
+      data: Product[];
+      currentPage: number;
+      pageSize: number;
+    }>("/user/game/all", {
+      params: {page, pageSize},
+    });
     console.log("Products response:", response.data);
     // Handle the nested data structure
     if (response.data.success && Array.isArray(response.data.data)) {
       console.log("Products data:", response.data.data);
-      return response.data.data;
+      return {
+        products: response.data.data,
+        currentPage: response.data.currentPage || page,
+        pageSize: response.data.pageSize || pageSize,
+      };
     }
     console.log("No products found or invalid response structure");
-    return [];
+    return {products: [], currentPage: page, pageSize};
   } catch (error) {
     console.error("Error fetching all products:", error);
-    return []; // Return empty array on error
+    return {products: [], currentPage: page, pageSize}; // Return empty array on error
   }
 };
 

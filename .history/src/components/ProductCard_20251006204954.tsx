@@ -13,6 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onClick,
   viewMode = "grid",
 }) => {
+
   return (
     <>
       {/* Grid View (default) */}

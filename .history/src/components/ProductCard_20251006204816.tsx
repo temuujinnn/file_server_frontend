@@ -1,6 +1,9 @@
-import React from "react";
+import React, {useState} from "react";
+import {Link} from "react-router-dom";
 import type {Product} from "../types/index";
 import type {ViewMode} from "./ViewToggle";
+import {useAuth} from "../contexts/AuthContext";
+import {downloadProduct} from "../services/api";
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +16,42 @@ const ProductCard: React.FC<ProductCardProps> = ({
   onClick,
   viewMode = "grid",
 }) => {
+  const {user, isAuthenticated} = useAuth();
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+
+  const handleDownloadClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering the card click
+
+    console.log("Download button clicked for product:", product.title);
+    console.log("Authentication status:", isAuthenticated);
+    console.log("User data:", user);
+
+    // Check authentication first
+    if (!isAuthenticated) {
+      console.log("User not authenticated - showing toast");
+      setShowToast(true);
+      // Auto-hide toast after 3 seconds
+      setTimeout(() => setShowToast(false), 3000);
+      return;
+    }
+
+    // Check subscription status
+    if (!user?.isSubscribed) {
+      console.log(
+        "User not premium - showing subscription modal ",
+        user?.isSubscribed
+      );
+      setShowSubscriptionModal(true);
+      return;
+    }
+
+    // User is authenticated and has premium subscription
+    console.log("User has premium subscription - showing download modal");
+    setShowDownloadModal(true);
+  };
+
   return (
     <>
       {/* Grid View (default) */}
@@ -193,6 +232,123 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   </svg>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {showToast && (
+        <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm z-50 animate-in slide-in-from-right-full duration-300">
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-blue-600 dark:text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  Та эхлээд нэвтрэнэ үү
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  Татаж авахын тулд нэвтрэх шаардлагатай
+                </p>
+              </div>
+              <button
+                onClick={() => setShowToast(false)}
+                className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Modal */}
+      {showSubscriptionModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Premium захиалга шаардлагатай
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              Бүтээгдэхүүн татаж авахын тулд Premium гишүүн болох шаардлагатай.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                to="/profile"
+                className="flex-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-2 rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 text-center"
+              >
+                Premium болох
+              </Link>
+              <button
+                onClick={() => setShowSubscriptionModal(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"
+              >
+                Цуцлах
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Download Modal */}
+      {showDownloadModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md mx-auto">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Татаж авах
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              "{product.title}" бүтээгдэхүүнийг татаж авах уу?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              {" "}
+              <button
+                onClick={() => {
+                  const productId = product.id || product._id;
+                  if (productId) {
+                    console.log("Starting download for product:", productId);
+                    downloadProduct(productId);
+                  }
+                  setShowDownloadModal(false);
+                }}
+                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 text-center"
+              >
+                Татаж авах
+              </button>
+              <button
+                onClick={() => setShowDownloadModal(false)}
+                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100 transition-colors duration-200"
+              >
+                Цуцлах
+              </button>
             </div>
           </div>
         </div>

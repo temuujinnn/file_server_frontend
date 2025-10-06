@@ -7,6 +7,8 @@ export interface Product {
   path?: string;
   mainTag?: string;
   additionalTags?: Tag[];
+  gameImages?: string[];
+  youtubeLink?: string;
   createdAt?: string;
   updatedAt?: string;
 }
