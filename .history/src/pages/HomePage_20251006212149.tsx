@@ -3,11 +3,7 @@ import TagSidebar from "../components/TagSidebar";
 import ProductGrid from "../components/ProductGrid";
 import ProductDetailModal from "../components/ProductDetailModal";
 import ViewToggle from "../components/ViewToggle";
-import {
-  fetchAllProducts,
-  fetchProductsByTag,
-  searchProducts,
-} from "../services/api";
+import {fetchAllProducts, fetchProductsByTag, searchProducts} from "../services/api";
 import type {Product, Tag} from "../types/index";
 import type {ViewMode} from "../components/ViewToggle";
 
@@ -255,44 +251,40 @@ const HomePage: React.FC = () => {
     setViewMode(mode);
   };
 
-  const handleProductSearch = async (query: string) => {
+  const handleProductSearch = (query: string) => {
     setSearchQuery(query);
-    setCurrentPage(1);
+    setHasMore(false); // Disable infinite scroll during search
 
     if (!query.trim()) {
       // If search is empty, show all products or apply current filters
-      setHasMore(true); // Re-enable infinite scroll
-
       if (selectedMainTag) {
         const filteredProducts = allProducts.filter(
           (product) => product.mainTag === selectedMainTag
         );
         setProducts(filteredProducts);
-        setHasMore(false); // Disable infinite scroll for client-side filtering
       } else if (selectedTag) {
-        // Keep current tag filter - reload products for the selected tag
-        const tagId = selectedTag._id ?? selectedTag._id;
-        if (tagId) {
-          await loadProductsByTag(tagId, 1, true);
-        }
+        // Keep current tag filter
+        setProducts(products);
       } else {
-        // Load all products
-        await loadAllProducts(1, true);
+        setProducts(allProducts);
+        setHasMore(true); // Re-enable infinite scroll
       }
       return;
     }
 
-    // Use API search for non-empty queries
-    try {
-      setLoading(true);
-      setError(null);
-      await loadSearchResults(query, 1, true);
-    } catch (err) {
-      setError("Хайлтын үр дүн ачаалахад алдаа гарлаа");
-      console.error("Error in product search:", err);
-    } finally {
-      setLoading(false);
+    // Filter products by search query
+    let filteredProducts = allProducts.filter((product) =>
+      product.title?.toLowerCase().includes(query.toLowerCase())
+    );
+
+    // Apply additional filters if they exist
+    if (selectedMainTag) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.mainTag === selectedMainTag
+      );
     }
+
+    setProducts(filteredProducts);
   };
 
   // Infinite scroll observer - simplified to avoid recreation
@@ -304,7 +296,7 @@ const HomePage: React.FC = () => {
       }
 
       // Don't create observer if loading or no more items
-      if (!node || loading || loadingMore || !hasMore) {
+      if (!node || loading || loadingMore || !hasMore || searchQuery) {
         return;
       }
 
@@ -317,20 +309,16 @@ const HomePage: React.FC = () => {
           if (!entry.isIntersecting) return;
           if (isLoadingRef.current) return;
           if (!hasMore) return;
+          if (searchQuery) return;
 
           console.log("Intersection detected, loading more...");
 
           // Use refs to get current values without causing re-renders
           const tagId = selectedTagIdRef.current;
           const mainTag = selectedMainTagRef.current;
-          const currentSearchQuery = searchQuery;
 
-          // If searching, load more search results
-          if (currentSearchQuery) {
-            loadSearchResults(currentSearchQuery, currentPage + 1, false);
-          }
           // If a tag is selected, load more products for that tag
-          else if (tagId) {
+          if (tagId) {
             loadProductsByTag(tagId, currentPage + 1, false);
           }
           // If no tag or mainTag is selected, load all products
@@ -437,7 +425,7 @@ const HomePage: React.FC = () => {
             />
 
             {/* Infinite Scroll Loading Indicator */}
-            {!loading && hasMore && !selectedMainTag && (
+            {!loading && hasMore && !selectedMainTag && !searchQuery && (
               <div ref={lastProductRef} className="flex justify-center py-8">
                 {loadingMore && (
                   <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">

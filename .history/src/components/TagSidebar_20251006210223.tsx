@@ -182,6 +182,7 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
         setLoading(true);
         const tagsData = await fetchAdditionalTags();
         setTags(tagsData);
+        setCategories(processedCategories);
         setError(null);
       } catch (err) {
         setError("Тег ачаалахад алдаа гарлаа");
@@ -192,14 +193,7 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
     };
 
     loadTags();
-  }, []);
-
-  // Update categories when tags change
-  useEffect(() => {
-    if (tags.length > 0) {
-      setCategories(processedCategories);
-    }
-  }, [tags, processedCategories]);
+  }, [processedCategories]);
 
   // Handle selectedMainTag changes
   useEffect(() => {

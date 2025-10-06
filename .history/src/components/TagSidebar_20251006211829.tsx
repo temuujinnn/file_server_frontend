@@ -140,11 +140,13 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
 
   // Memoize category processing to avoid recalculating on every render
   const processedCategories = useMemo(() => {
+    console.log("Processing categories with tags:", tags);
     const gameAdditionalTags: Tag[] = [];
     const softwareAdditionalTags: Tag[] = [];
 
     // Group tags by their belongsTo property
     tags.forEach((tag) => {
+      console.log(`Processing tag: ${tag.name}, belongsTo: ${tag.belongsTo}`);
       if (tag.belongsTo === "Game") {
         if (!gameAdditionalTags.find((t) => t._id === tag._id)) {
           gameAdditionalTags.push(tag);
@@ -156,7 +158,10 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
       }
     });
 
-    return [
+    console.log("Game tags:", gameAdditionalTags);
+    console.log("Software tags:", softwareAdditionalTags);
+
+    const categories = [
       {
         id: "games",
         name: "Тоглоом",
@@ -174,6 +179,9 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
         isExpanded: false,
       },
     ];
+
+    console.log("Processed categories:", categories);
+    return categories;
   }, [tags]);
 
   useEffect(() => {

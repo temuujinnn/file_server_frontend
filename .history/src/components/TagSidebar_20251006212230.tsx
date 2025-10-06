@@ -196,7 +196,9 @@ const TagSidebar: React.FC<TagSidebarProps> = ({
 
   // Update categories when tags change
   useEffect(() => {
+    console.log("Categories useEffect triggered. Tags length:", tags.length);
     if (tags.length > 0) {
+      console.log("Setting categories to:", processedCategories);
       setCategories(processedCategories);
     }
   }, [tags, processedCategories]);

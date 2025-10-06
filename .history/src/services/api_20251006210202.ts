@@ -87,39 +87,6 @@ export const fetchAllProducts = async (
   }
 };
 
-export const searchProducts = async (
-  query: string,
-  page: number = 1,
-  pageSize: number = 20
-): Promise<{products: Product[]; currentPage: number; pageSize: number}> => {
-  try {
-    console.log(`Searching products with query: "${query}", page ${page}...`);
-    const response = await api.get<{
-      success: boolean;
-      data: Product[];
-      currentPage: number;
-      pageSize: number;
-    }>("/user/game/all", {
-      params: {page, pageSize, name: query},
-    });
-    console.log("Search response:", response.data);
-    // Handle the nested data structure
-    if (response.data.success && Array.isArray(response.data.data)) {
-      console.log("Search data:", response.data.data);
-      return {
-        products: response.data.data,
-        currentPage: response.data.currentPage || page,
-        pageSize: response.data.pageSize || pageSize,
-      };
-    }
-    console.log("No search results found or invalid response structure");
-    return {products: [], currentPage: page, pageSize};
-  } catch (error) {
-    console.error("Error searching products:", error);
-    return {products: [], currentPage: page, pageSize}; // Return empty array on error
-  }
-};
-
 export const fetchGames = async (): Promise<Product[]> => {
   try {
     const response = await api.get<Product[]>("/user/game/games");

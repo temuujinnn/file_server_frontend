@@ -3,11 +3,7 @@ import TagSidebar from "../components/TagSidebar";
 import ProductGrid from "../components/ProductGrid";
 import ProductDetailModal from "../components/ProductDetailModal";
 import ViewToggle from "../components/ViewToggle";
-import {
-  fetchAllProducts,
-  fetchProductsByTag,
-  searchProducts,
-} from "../services/api";
+import {fetchAllProducts, fetchProductsByTag, searchProducts} from "../services/api";
 import type {Product, Tag} from "../types/index";
 import type {ViewMode} from "../components/ViewToggle";
 
@@ -262,7 +258,7 @@ const HomePage: React.FC = () => {
     if (!query.trim()) {
       // If search is empty, show all products or apply current filters
       setHasMore(true); // Re-enable infinite scroll
-
+      
       if (selectedMainTag) {
         const filteredProducts = allProducts.filter(
           (product) => product.mainTag === selectedMainTag
@@ -304,7 +300,7 @@ const HomePage: React.FC = () => {
       }
 
       // Don't create observer if loading or no more items
-      if (!node || loading || loadingMore || !hasMore) {
+      if (!node || loading || loadingMore || !hasMore || searchQuery) {
         return;
       }
 
@@ -317,6 +313,7 @@ const HomePage: React.FC = () => {
           if (!entry.isIntersecting) return;
           if (isLoadingRef.current) return;
           if (!hasMore) return;
+          if (searchQuery) return;
 
           console.log("Intersection detected, loading more...");
 
@@ -437,7 +434,7 @@ const HomePage: React.FC = () => {
             />
 
             {/* Infinite Scroll Loading Indicator */}
-            {!loading && hasMore && !selectedMainTag && (
+            {!loading && hasMore && !selectedMainTag && !searchQuery && (
               <div ref={lastProductRef} className="flex justify-center py-8">
                 {loadingMore && (
                   <div className="flex items-center space-x-2 text-gray-500 dark:text-gray-400">
